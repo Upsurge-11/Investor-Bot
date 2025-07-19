@@ -1,8 +1,7 @@
 """
 nse_data.py
 This module provides utility functions to fetch and analyze stock data for the Nifty 50 index using the yfinance library.
-It includes functions to retrieve the list of Nifty 50 stock symbols, fetch stock data for individual symbols, identify top gainers or losers,
-and analyze the overall market sentiment based on daily price changes.
+It includes functions to retrieve the list of Nifty 50 stock symbols, fetch stock data for individual symbols, identify top gainers or losers, analyze the overall market sentiment based on daily price changes and fetch the latest news related to the Nifty 50 index.
 Functions:
   fetch_nifty50_symbols() -> list[str]:
     Returns a hardcoded list of all 50 Nifty 50 stock symbols with the '.NS' suffix for NSE.
@@ -12,6 +11,8 @@ Functions:
     Analyzes all Nifty 50 stocks to calculate daily percentage change and returns either top gainers or losers, or the complete sorted list.
   fetch_market_mood() -> str:
     Analyzes the overall market sentiment based on Nifty 50 stock performance, indicating if the market is bullish, bearish, or neutral.
+  fetch_news() -> list[dict]:
+    Fetches the latest news for the Nifty 50 index, returning a list of news items with titles, links, and publication dates.
 """
 import yfinance as yf
 
@@ -143,3 +144,16 @@ def fetch_market_mood() -> str:
     return f"Market is bearish with {percentage:.2f}% of stocks losing and an average loss of {avg_bear_change_pct:.2f}%. Stocks gaining on average {avg_bull_change_pct:.2f}%."
   else:
     return "Market mood is neutral with equal gainers and losers."
+
+"""Fetches the latest news for the Nifty 50 index.
+
+Uses yfinance to retrieve news articles related to the Nifty 50 index.
+Returns a list of news items containing titles, links, and publication dates.
+
+Returns:
+    list[dict]: A list of dictionaries containing news titles, links, and publication dates
+"""
+def fetch_news():
+  ticker = yf.Ticker("^NSEI")  # Nifty 50 index
+  news = ticker.news
+  return news
