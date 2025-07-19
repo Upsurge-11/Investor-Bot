@@ -1,3 +1,18 @@
+"""
+nse_data.py
+This module provides utility functions to fetch and analyze stock data for the Nifty 50 index using the yfinance library.
+It includes functions to retrieve the list of Nifty 50 stock symbols, fetch stock data for individual symbols, identify top gainers or losers,
+and analyze the overall market sentiment based on daily price changes.
+Functions:
+  fetch_nifty50_symbols() -> list[str]:
+    Returns a hardcoded list of all 50 Nifty 50 stock symbols with the '.NS' suffix for NSE.
+  fetch_stock_data(symbol: str, full: bool = False) -> dict:
+    Fetches stock data for a given symbol using yfinance. Returns either fast info (basic metrics) or full info (comprehensive data).
+  fetch_gainers_or_losers(fetch_gainers: bool = True, full_list: bool = False) -> list[dict]:
+    Analyzes all Nifty 50 stocks to calculate daily percentage change and returns either top gainers or losers, or the complete sorted list.
+  fetch_market_mood() -> str:
+    Analyzes the overall market sentiment based on Nifty 50 stock performance, indicating if the market is bullish, bearish, or neutral.
+"""
 import yfinance as yf
 
 """
