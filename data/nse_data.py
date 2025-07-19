@@ -1,18 +1,23 @@
 """
 nse_data.py
-This module provides utility functions to fetch and analyze stock data for the Nifty 50 index using the yfinance library.
-It includes functions to retrieve the list of Nifty 50 stock symbols, fetch stock data for individual symbols, identify top gainers or losers, analyze the overall market sentiment based on daily price changes and fetch the latest news related to the Nifty 50 index.
+
+Utility functions for fetching and analyzing Nifty 50 stock data using yfinance.
+
 Functions:
-  fetch_nifty50_symbols() -> list[str]:
-    Returns a hardcoded list of all 50 Nifty 50 stock symbols with the '.NS' suffix for NSE.
-  fetch_stock_data(symbol: str, full: bool = False) -> dict:
-    Fetches stock data for a given symbol using yfinance. Returns either fast info (basic metrics) or full info (comprehensive data).
-  fetch_gainers_or_losers(fetch_gainers: bool = True, full_list: bool = False) -> list[dict]:
-    Analyzes all Nifty 50 stocks to calculate daily percentage change and returns either top gainers or losers, or the complete sorted list.
-  fetch_market_mood() -> str:
-    Analyzes the overall market sentiment based on Nifty 50 stock performance, indicating if the market is bullish, bearish, or neutral.
-  fetch_news() -> list[dict]:
-    Fetches the latest news for the Nifty 50 index, returning a list of news items with titles, links, and publication dates.
+  - fetch_nifty50_symbols():
+      Returns a list of all 50 Nifty 50 stock symbols with the '.NS' suffix.
+
+  - fetch_stock_data(symbol, full=False):
+      Fetches stock data for a given symbol. Returns fast info or full info.
+
+  - fetch_gainers_or_losers(fetch_gainers=True, full_list=False):
+      Calculates daily percentage change for all Nifty 50 stocks and returns top gainers, losers, or the full sorted list.
+
+  - fetch_market_mood():
+      Analyzes Nifty 50 stock performance to determine if the market is bullish, bearish, or neutral.
+
+  - fetch_news():
+      Fetches the latest news for the Nifty 50 index, returning a list of news items with details.
 """
 import yfinance as yf
 
@@ -145,15 +150,41 @@ def fetch_market_mood() -> str:
   else:
     return "Market mood is neutral with equal gainers and losers."
 
-"""Fetches the latest news for the Nifty 50 index.
+"""
+Fetches the latest news for the Nifty 50 index.
 
 Uses yfinance to retrieve news articles related to the Nifty 50 index.
-Returns a list of news items containing titles, links, and publication dates.
+Extracts relevant information from the nested news structure including title,
+summary, publication date, provider, and clickthrough URL.
 
 Returns:
-    list[dict]: A list of dictionaries containing news titles, links, and publication dates
+    list[dict]: A list of dictionaries containing news information with keys:
+                - id: Unique identifier for the news item
+                - title: News article title
+                - summary: Brief summary of the article
+                - pub_date: Publication date in ISO format
+                - provider: News provider/source name
+                - url: Clickthrough URL to the full article
 """
-def fetch_news():
-  ticker = yf.Ticker("^NSEI")  # Nifty 50 index
+def fetch_news() -> list[dict]:
+  ticker = yf.Ticker("^NSEI")
   news = ticker.news
-  return news
+  news_list = []
+  
+  for item in news:
+    try:
+      content = item.get('content', {})
+      news_item = {
+        "id": content.get('id'),
+        "title": content.get('title'),
+        "summary": content.get('summary'),
+        "pub_date": content.get('pubDate'),
+        "provider": content.get('provider', {}).get('displayName'),
+        "url": content.get('clickThroughUrl', {}).get('url')
+      }
+      news_list.append(news_item)
+    except Exception as e:
+      print(f"Error processing news item: {e}")
+      continue
+  
+  return news_list
