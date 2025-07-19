@@ -1,0 +1,10 @@
+# Nifty 50 Configuration
+fetchAllStocksInIndex: true
+
+fetchStockDetails:
+  enabled: false
+  stockSymbol: "RELIANCE" # Example: RELIANCE, TCS, HDFCBANK
+
+fetchGainers: false
+fetchLosers: false
+fetchMarketMood: false
