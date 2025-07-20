@@ -20,9 +20,10 @@ def main():
         print("5. Comprehensive Analysis (All Strategies)")
         print("6. Quick Market Overview")
         print("7. Backtest Strategies (Performance Analysis)")
-        print("8. Exit")
+        print("8. Latest Market News")
+        print("9. Exit")
 
-        choice = input("\nEnter your choice (1-8): ").strip()
+        choice = input("\nEnter your choice (1-9): ").strip()
 
         try:
             if choice == '1':
@@ -69,6 +70,92 @@ def main():
                     print("Invalid choice, running simplified backtest...")
                     nifty50_strategy.run_simplified_backtest()
             elif choice == '8':
+                print("\n📰 Latest Market News:")
+                print("Choose news option:")
+                print("  a) Latest News Headlines")
+                print("  b) News with Sentiment Analysis") 
+                print("  c) Detailed News Analysis")
+                
+                news_choice = input("Enter choice (a/b/c): ").strip().lower()
+                
+                if news_choice == 'a':
+                    print("\n📰 Latest Market News:")
+                    print("=" * 60)
+                    try:
+                        news_items = nifty50_strategy.nse_data.fetch_news()
+                        
+                        if not news_items:
+                            print("No news available at the moment.")
+                        else:
+                            print(f"Found {len(news_items)} news articles:\n")
+                            
+                            for i, news in enumerate(news_items[:10], 1):  # Show top 10 news items
+                                print(f"{i}. {news.get('title', 'No Title')}")
+                                
+                                if news.get('provider'):
+                                    print(f"   Source: {news['provider']}")
+                                
+                                if news.get('summary'):
+                                    # Truncate summary if too long
+                                    summary = news['summary']
+                                    if len(summary) > 150:
+                                        summary = summary[:147] + "..."
+                                    print(f"   Summary: {summary}")
+                                
+                                if news.get('pub_date'):
+                                    print(f"   Date: {news['pub_date']}")
+                                
+                                if news.get('url'):
+                                    print(f"   URL: {news['url']}")
+                                
+                                print("-" * 60)
+                    except Exception as e:
+                        print(f"Error fetching news: {e}")
+                
+                elif news_choice == 'b':
+                    nifty50_strategy.get_news_with_analysis()
+                
+                elif news_choice == 'c':
+                    nifty50_strategy.analyze_news_sentiment()
+                
+                else:
+                    print("Invalid choice, showing basic news...")
+                    try:
+                        news_items = nifty50_strategy.nse_data.fetch_news()
+                        if news_items:
+                            for i, news in enumerate(news_items[:5], 1):
+                                print(f"{i}. {news.get('title', 'No Title')}")
+                        else:
+                            print("No news available.")
+                    except Exception as e:
+                        print(f"Error fetching news: {e}")
+                
+                # Option to get detailed news
+                if news_choice == 'a':
+                    try:
+                        news_items = nifty50_strategy.nse_data.fetch_news()
+                        if news_items:
+                            detail_choice = input("\nWould you like to see detailed news? (y/n): ").strip().lower()
+                            if detail_choice == 'y':
+                                try:
+                                    news_num = int(input(f"Enter news number (1-{min(len(news_items), 10)}): "))
+                                    if 1 <= news_num <= min(len(news_items), 10):
+                                        selected_news = news_items[news_num - 1]
+                                        print(f"\n📰 Detailed News Article:")
+                                        print("=" * 60)
+                                        print(f"Title: {selected_news.get('title', 'No Title')}")
+                                        print(f"Source: {selected_news.get('provider', 'Unknown')}")
+                                        print(f"Date: {selected_news.get('pub_date', 'Unknown')}")
+                                        print(f"Summary: {selected_news.get('summary', 'No summary available')}")
+                                        if selected_news.get('url'):
+                                            print(f"Full Article: {selected_news['url']}")
+                                    else:
+                                        print("Invalid news number.")
+                                except ValueError:
+                                    print("Please enter a valid number.")
+                    except Exception as e:
+                        print(f"Error in detailed news view: {e}")
+            elif choice == '9':
                 print("Thank you for using Nifty 50 Strategy Bot! 👋")
                 break
             else:

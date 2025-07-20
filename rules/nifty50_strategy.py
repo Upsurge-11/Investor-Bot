@@ -653,3 +653,169 @@ def backtest_strategies():
         'risk_level': risk_level,
         'strategies_performance': strategies_performance
     }
+
+def analyze_news_sentiment():
+    """Analyze news sentiment for trading insights"""
+    print("\n" + "="*80)
+    print("NEWS SENTIMENT ANALYSIS")
+    print("="*80)
+    
+    try:
+        news_items = nse_data.fetch_news()
+        
+        if not news_items:
+            print("No news available for analysis.")
+            return None
+        
+        print(f"\n📰 Analyzing {len(news_items)} news articles...")
+        
+        # Simple sentiment analysis based on keywords
+        positive_keywords = ['rise', 'gain', 'up', 'high', 'strong', 'bullish', 'positive', 'growth', 'increase', 'rally', 'surge', 'boom']
+        negative_keywords = ['fall', 'drop', 'down', 'low', 'weak', 'bearish', 'negative', 'decline', 'decrease', 'crash', 'plunge', 'slump']
+        
+        sentiment_scores = []
+        
+        for news in news_items:
+            title = news.get('title', '').lower()
+            summary = news.get('summary', '').lower()
+            text = f"{title} {summary}"
+            
+            positive_count = sum(1 for word in positive_keywords if word in text)
+            negative_count = sum(1 for word in negative_keywords if word in text)
+            
+            if positive_count > negative_count:
+                sentiment = 'positive'
+                score = positive_count - negative_count
+            elif negative_count > positive_count:
+                sentiment = 'negative'
+                score = negative_count - positive_count
+            else:
+                sentiment = 'neutral'
+                score = 0
+            
+            sentiment_scores.append({
+                'title': news.get('title', 'No Title'),
+                'sentiment': sentiment,
+                'score': score,
+                'provider': news.get('provider', 'Unknown')
+            })
+        
+        # Calculate overall sentiment
+        positive_news = [s for s in sentiment_scores if s['sentiment'] == 'positive']
+        negative_news = [s for s in sentiment_scores if s['sentiment'] == 'negative']
+        neutral_news = [s for s in sentiment_scores if s['sentiment'] == 'neutral']
+        
+        print(f"\n📊 Sentiment Breakdown:")
+        print(f"  Positive News: {len(positive_news)} ({len(positive_news)/len(sentiment_scores)*100:.1f}%)")
+        print(f"  Negative News: {len(negative_news)} ({len(negative_news)/len(sentiment_scores)*100:.1f}%)")
+        print(f"  Neutral News: {len(neutral_news)} ({len(neutral_news)/len(sentiment_scores)*100:.1f}%)")
+        
+        # Overall market sentiment
+        if len(positive_news) > len(negative_news):
+            overall_sentiment = "BULLISH"
+            confidence = (len(positive_news) / len(sentiment_scores)) * 100
+        elif len(negative_news) > len(positive_news):
+            overall_sentiment = "BEARISH"
+            confidence = (len(negative_news) / len(sentiment_scores)) * 100
+        else:
+            overall_sentiment = "NEUTRAL"
+            confidence = 50
+        
+        print(f"\n🎯 Overall News Sentiment: {overall_sentiment}")
+        print(f"📈 Confidence Level: {confidence:.1f}%")
+        
+        # Show top positive and negative news
+        if positive_news:
+            print(f"\n✅ Top Positive News:")
+            top_positive = sorted(positive_news, key=lambda x: x['score'], reverse=True)[:3]
+            for i, news in enumerate(top_positive, 1):
+                print(f"  {i}. {news['title'][:80]}..." if len(news['title']) > 80 else f"  {i}. {news['title']}")
+        
+        if negative_news:
+            print(f"\n❌ Top Negative News:")
+            top_negative = sorted(negative_news, key=lambda x: x['score'], reverse=True)[:3]
+            for i, news in enumerate(top_negative, 1):
+                print(f"  {i}. {news['title'][:80]}..." if len(news['title']) > 80 else f"  {i}. {news['title']}")
+        
+        # Trading recommendations based on news sentiment
+        print(f"\n💡 News-Based Trading Recommendations:")
+        if overall_sentiment == "BULLISH" and confidence > 60:
+            print("  • Consider momentum strategies")
+            print("  • Look for buying opportunities")
+            print("  • Monitor breakout stocks")
+        elif overall_sentiment == "BEARISH" and confidence > 60:
+            print("  • Consider defensive strategies")
+            print("  • Look for value opportunities")
+            print("  • Be cautious with new positions")
+        else:
+            print("  • Mixed sentiment - use balanced approach")
+            print("  • Focus on fundamental analysis")
+            print("  • Wait for clearer signals")
+        
+        return {
+            'overall_sentiment': overall_sentiment,
+            'confidence': confidence,
+            'positive_count': len(positive_news),
+            'negative_count': len(negative_news),
+            'neutral_count': len(neutral_news),
+            'total_news': len(sentiment_scores)
+        }
+        
+    except Exception as e:
+        print(f"Error in news sentiment analysis: {e}")
+        return None
+
+def get_news_with_analysis():
+    """Get news with sentiment analysis"""
+    print("\n📰 Latest Market News with Sentiment Analysis")
+    print("=" * 60)
+    
+    try:
+        news_items = nse_data.fetch_news()
+        
+        if not news_items:
+            print("No news available.")
+            return
+        
+        # Simple sentiment keywords
+        positive_keywords = ['rise', 'gain', 'up', 'high', 'strong', 'bullish', 'positive', 'growth', 'rally']
+        negative_keywords = ['fall', 'drop', 'down', 'low', 'weak', 'bearish', 'negative', 'decline', 'crash']
+        
+        print(f"📊 Found {len(news_items)} news articles:\n")
+        
+        for i, news in enumerate(news_items[:8], 1):  # Show top 8 news items
+            title = news.get('title', 'No Title')
+            summary = news.get('summary', '')
+            
+            # Simple sentiment analysis
+            text = f"{title} {summary}".lower()
+            positive_count = sum(1 for word in positive_keywords if word in text)
+            negative_count = sum(1 for word in negative_keywords if word in text)
+            
+            if positive_count > negative_count:
+                sentiment_emoji = "📈"
+                sentiment = "Positive"
+            elif negative_count > positive_count:
+                sentiment_emoji = "📉"
+                sentiment = "Negative"
+            else:
+                sentiment_emoji = "➡️"
+                sentiment = "Neutral"
+            
+            print(f"{sentiment_emoji} {i}. {title}")
+            print(f"   Sentiment: {sentiment}")
+            
+            if news.get('provider'):
+                print(f"   Source: {news['provider']}")
+            
+            if summary and len(summary) > 0:
+                short_summary = summary[:120] + "..." if len(summary) > 120 else summary
+                print(f"   Summary: {short_summary}")
+            
+            print("-" * 60)
+        
+        # Quick sentiment analysis
+        analyze_news_sentiment()
+        
+    except Exception as e:
+        print(f"Error fetching news: {e}")

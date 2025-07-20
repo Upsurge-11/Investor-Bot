@@ -39,10 +39,10 @@ A comprehensive Python-based investment bot that implements multiple trading str
 - **Multiple Timeframes**: Support for different analysis periods (1mo, 3mo, 6mo, 1y)
 - **Risk Management**: Confidence scoring and position sizing
 - **Backtesting**: Historical performance analysis of strategies
+- **News Analysis**: Latest market news with sentiment analysis
 - **Interactive CLI**: User-friendly command-line interface
 - **Configurable**: YAML-based configuration for strategy parameters
 - **Company Mapping**: Easy-to-use mapping between company names and stock ticker symbols
-- **Configurable Analysis**: Customizable analysis parameters through YAML configuration files
 - **Investment Strategies**: Built-in strategy modules for systematic investment approaches
 
 ## 📁 Project Structure
@@ -121,7 +121,54 @@ Analyzes overall market sentiment and returns descriptive market mood.
 
 Fetches latest financial news related to Nifty 50 index.
 
-## 🔧 Configuration
+## � News & Sentiment Analysis
+
+### News Features
+
+The bot provides comprehensive news analysis capabilities:
+
+#### **1. Latest News Headlines**
+
+- Fetches real-time financial news from multiple sources
+- Shows news title, source, summary, and publication date
+- Interactive detailed news viewing
+
+#### **2. News with Sentiment Analysis**
+
+- Analyzes news sentiment (Positive 📈, Negative 📉, Neutral ➡️)
+- Shows sentiment indicators for each news item
+- Provides quick market sentiment overview
+
+#### **3. Detailed Sentiment Analysis**
+
+- Comprehensive sentiment breakdown
+- Overall market sentiment calculation
+- Trading recommendations based on news sentiment
+- Top positive and negative news identification
+
+### News Usage Examples
+
+```python
+from data import nse_data
+from rules import nifty50_strategy
+
+# Fetch latest news
+news_items = nse_data.fetch_news()
+
+# Analyze news sentiment
+sentiment_result = nifty50_strategy.analyze_news_sentiment()
+
+# Get news with sentiment indicators
+nifty50_strategy.get_news_with_analysis()
+```
+
+### News-Based Trading Signals
+
+- **Bullish News (>60% positive)**: Consider momentum strategies, look for buying opportunities
+- **Bearish News (>60% negative)**: Consider defensive strategies, look for value opportunities
+- **Mixed Sentiment**: Use balanced approach, focus on fundamental analysis
+
+## �🔧 Configuration
 
 ### Nifty 50 Configuration (`configs/nifty50_config.yaml`)
 
