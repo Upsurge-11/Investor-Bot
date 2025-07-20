@@ -1,0 +1,64 @@
+# Strategy Configuration for Nifty 50 Investment Bot
+
+# Momentum Strategy Settings
+momentum:
+  top_gainers:
+    enabled: true
+    top_n: 5
+    min_gain_percent: 2.0
+
+  moving_average:
+    enabled: true
+    short_period: 20
+    long_period: 50
+    stocks_to_analyze: 10
+
+# Mean Reversion Strategy Settings
+mean_reversion:
+  rsi:
+    enabled: true
+    period: 14
+    oversold_threshold: 30
+    stocks_to_analyze: 15
+
+  support_resistance:
+    enabled: true
+    support_tolerance: 0.02 # 2% tolerance
+    resistance_tolerance: 0.02
+    stocks_to_analyze: 10
+
+# Value Strategy Settings
+value:
+  low_pe:
+    enabled: true
+    max_pe_ratio: 15
+    min_pe_ratio: 1
+
+  high_dividend:
+    enabled: true
+    min_yield_percent: 2.0
+
+# Sentiment Strategy Settings
+sentiment:
+  market_mood:
+    enabled: true
+    bullish_stock_count: 3
+
+  contrarian:
+    enabled: true
+    min_loss_percent: -3.0
+    max_stocks: 3
+
+# Risk Management Settings
+risk_management:
+  max_recommendations: 15
+  min_confidence_score: 50
+  diversification:
+    max_stocks_per_sector: 3
+    max_allocation_per_stock: 0.1 # 10%
+
+# General Settings
+general:
+  analysis_period: "6mo" # 1mo, 3mo, 6mo, 1y, 2y
+  update_frequency: "daily" # daily, weekly
+  enable_notifications: false

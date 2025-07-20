@@ -1,13 +1,46 @@
-# 📈 Investor-Bot
+# � Nifty 50 Investment Strategy Bot
 
-A comprehensive Python-based investment analysis tool focused on the Indian stock market, specifically designed for analyzing and tracking Nifty 50 stocks. This bot provides real-time market data, sentiment analysis, and investment insights to help make informed trading decisions.
+A comprehensive Python-based investment bot that implements multiple trading strategies for Nifty 50 stocks using real-time market data and technical analysis.
 
-## 🚀 Features
+## 📊 Available Strategies
 
-- **Real-time Stock Data**: Fetch live stock prices and market data for all Nifty 50 companies
-- **Market Sentiment Analysis**: Analyze overall market mood (bullish/bearish/neutral) based on stock performance
-- **Top Gainers & Losers**: Identify the best and worst performing stocks in real-time
-- **News Integration**: Get latest financial news related to Indian markets
+### 1. **Momentum Strategies**
+
+- **Top Gainers Strategy**: Identifies and recommends stocks with strong upward momentum
+- **Moving Average Crossover**: Golden cross (20MA crossing above 50MA) signals
+- **Breakout Strategy**: Stocks breaking through resistance levels
+
+### 2. **Mean Reversion Strategies**
+
+- **RSI Oversold/Overbought**: Buy oversold stocks (RSI < 30), sell overbought (RSI > 70)
+- **Support/Resistance Levels**: Buy near support, sell near resistance
+- **Bollinger Bands**: Mean reversion around price bands
+
+### 3. **Value-Based Strategies**
+
+- **Low P/E Ratio Strategy**: Identify undervalued stocks with low price-to-earnings ratios
+- **High Dividend Yield**: Focus on stocks with attractive dividend yields
+- **Book Value Analysis**: Stocks trading below their book value
+
+### 4. **Sentiment-Based Strategies**
+
+- **Market Mood Following**: Align with overall market sentiment (bullish/bearish)
+- **Contrarian Strategy**: Go against prevailing market sentiment
+- **News-Based Analysis**: React to market news and sentiment
+
+### 5. **Sector Rotation**
+
+- **Sector Leadership**: Focus on best-performing sectors within Nifty 50
+- **Diversification**: Equal weight allocation across sectors
+
+## 🛠️ Features
+
+- **Real-time Data**: Uses yfinance for live NSE market data
+- **Multiple Timeframes**: Support for different analysis periods (1mo, 3mo, 6mo, 1y)
+- **Risk Management**: Confidence scoring and position sizing
+- **Backtesting**: Historical performance analysis of strategies
+- **Interactive CLI**: User-friendly command-line interface
+- **Configurable**: YAML-based configuration for strategy parameters
 - **Company Mapping**: Easy-to-use mapping between company names and stock ticker symbols
 - **Configurable Analysis**: Customizable analysis parameters through YAML configuration files
 - **Investment Strategies**: Built-in strategy modules for systematic investment approaches
