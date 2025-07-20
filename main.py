@@ -19,10 +19,11 @@ def main():
         print("4. Mean Reversion Strategies (RSI + Support/Resistance)")
         print("5. Comprehensive Analysis (All Strategies)")
         print("6. Quick Market Overview")
-        print("7. Exit")
-        
-        choice = input("\nEnter your choice (1-7): ").strip()
-        
+        print("7. Backtest Strategies (Performance Analysis)")
+        print("8. Exit")
+
+        choice = input("\nEnter your choice (1-8): ").strip()
+
         try:
             if choice == '1':
                 nifty50_strategy.run_momentum_strategy()
@@ -50,6 +51,24 @@ def main():
                 for stock in losers:
                     print(f"  {stock['symbol'].replace('.NS', '')}: {stock['change_pct']:.2f}%")
             elif choice == '7':
+                print("\n🔍 Backtesting Strategies...")
+                print("Choose backtesting option:")
+                print("  a) Quick Backtest (Simplified)")
+                print("  b) Detailed Analysis") 
+                print("  c) Full Historical Backtest")
+                
+                backtest_choice = input("Enter choice (a/b/c): ").strip().lower()
+                
+                if backtest_choice == 'a':
+                    nifty50_strategy.run_simplified_backtest()
+                elif backtest_choice == 'b':
+                    nifty50_strategy.backtest_strategies()
+                elif backtest_choice == 'c':
+                    nifty50_strategy.run_backtest()
+                else:
+                    print("Invalid choice, running simplified backtest...")
+                    nifty50_strategy.run_simplified_backtest()
+            elif choice == '8':
                 print("Thank you for using Nifty 50 Strategy Bot! 👋")
                 break
             else:
